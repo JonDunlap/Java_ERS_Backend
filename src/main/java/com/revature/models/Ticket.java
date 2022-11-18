@@ -1,5 +1,8 @@
 package com.revature.models;
 
+import java.text.NumberFormat;
+import java.util.Locale;
+
 public class Ticket {
 
 	// ticket variables
@@ -7,8 +10,12 @@ public class Ticket {
 	String description;
 	String status;
 
+	// create variable for formatting currency
+	NumberFormat formatter = NumberFormat.getCurrencyInstance(Locale.US);
+
 	// ticket constructor
-	public Ticket(double amount, String description) {
+	public Ticket(
+			double amount, String description) {
 		super();
 		this.amount = amount;
 		this.description = description;
@@ -18,7 +25,7 @@ public class Ticket {
 	// override .toString() method
 	@Override
 	public String toString() {
-		return ("Amount " + amount + ", Description " + description + ", Status " + status);
+		return ("Amount " + formatter.format(amount) + ", Description " + description + ", Status " + status);
 	}
 
 	// public method to change default status variable
