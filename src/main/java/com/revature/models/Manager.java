@@ -5,6 +5,7 @@ public class Manager extends Employee {
 	// manager variables
 	public boolean isManager;
 
+	// TODO: may not need this model, just add isManager variable to Employee model
 	// manager constructor
 	public Manager(String email, String password, boolean isManager) {
 		// call super for employee constructor variables
