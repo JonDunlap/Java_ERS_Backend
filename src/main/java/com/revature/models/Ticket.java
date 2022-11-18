@@ -5,11 +5,14 @@ public class Ticket {
 	// ticket variables
 	double amount;
 	String description;
-	String status = "pending";
+	String status;
 
 	// ticket constructor
-	public Ticket() {
+	public Ticket(double amount, String description) {
 		super();
+		this.amount = amount;
+		this.description = description;
+		this.status = "pending";
 	}
 
 	// public method to change default status variable
