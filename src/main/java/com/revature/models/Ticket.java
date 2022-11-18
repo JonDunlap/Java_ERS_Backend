@@ -30,7 +30,7 @@ public class Ticket {
 
 	// public method to change default status variable
 	public void setStatus(String status) {
-		// TODO: possibly move this logic into the business logic class
+		// ? possibly move this logic into the business logic class
 		if (status.toLowerCase().equals("approved") || status.toLowerCase().equals("denied")) {
 			this.status = status.toLowerCase();
 		} else {
