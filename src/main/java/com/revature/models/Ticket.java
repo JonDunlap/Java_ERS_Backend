@@ -15,6 +15,12 @@ public class Ticket {
 		this.status = "pending";
 	}
 
+	// override .toString() method
+	@Override
+	public String toString() {
+		return ("Amount " + amount + ", Description " + description + ", Status " + status);
+	}
+
 	// public method to change default status variable
 	public void setStatus(String status) {
 		// TODO: possibly move this logic into the business logic class

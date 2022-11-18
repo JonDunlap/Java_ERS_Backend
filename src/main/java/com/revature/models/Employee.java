@@ -12,4 +12,10 @@ public class Employee {
 		this.password = password;
 	}
 
+	// override .toString() method
+	@Override
+	public String toString() {
+		return ("Email " + email + ", Password " + password);
+	}
+
 }

@@ -12,4 +12,10 @@ public class Manager extends Employee {
 		this.isManager = isManager;
 	}
 
+	// override .toString() method
+	@Override
+	public String toString() {
+		return ("Email " + email + ", Password " + password + ", Manager " + isManager);
+	}
+
 }
