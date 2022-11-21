@@ -8,7 +8,6 @@ import com.revature.models.Employee;
 public class EmployeeService {
 	private EmployeeDAO employeeDAO = new EmployeeDAO();
 
-	// ! DEBUG - use different method to get employee ID
 	public List<Employee> getEmployees() {
 		return employeeDAO.getEmployees();
 	}
@@ -17,6 +16,7 @@ public class EmployeeService {
 		return employeeDAO.getEmployee(employee);
 	}
 
+	// TODO - add validation that email doesn't exist already
 	public void addEmployee(Employee employee) {
 		// ! DEBUG - use salt/hash method for generating employee IDs
 		int newID = getEmployees().size() + 1;

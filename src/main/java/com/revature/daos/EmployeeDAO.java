@@ -14,12 +14,12 @@ public class EmployeeDAO {
 		employees.add(new Employee(2, "test2@email.com", "abc123", true));
 	}
 
-	// ! DEBUG
+	// ! DEBUG - possibly keep, may need all employees to verify email doesn't exist
 	public List<Employee> getEmployees() {
 		return employees;
 	}
 
-	// ? pass email/password or pass Employee?
+	// ? does this go in service or here?
 	public Employee getEmployee(Employee employee) {
 		for (Employee emp : employees) {
 			if (emp.getEmail().matches(employee.getEmail()) && emp.getPassword().matches(employee.getPassword())) {
