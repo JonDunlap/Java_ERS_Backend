@@ -1,47 +1,30 @@
 package com.revature;
 
-import com.revature.models.Employee;
-import com.revature.models.Manager;
-import com.revature.models.Ticket;
+import com.revature.controllers.Controller;
+import com.revature.controllers.EmployeeController;
+import com.revature.controllers.TicketController;
 
 import io.javalin.Javalin;
 
 public class Main {
+	// Create Javalin variable for use in main method and configure method
+	private static Javalin app;
 
 	public static void main(String[] args) {
 
-		// ======== Server variables
-		// Port variable
-		// TODO import environment variables from .env file
-		// int port = Dotenv.get("PORT") ? Dotenv.get("PORT") : 4000;
-		int port = 4000; // * Temporary variable */
-
+		// ======== Javalin Server
 		// Create Javalin server
-		Javalin app = Javalin.create();
-		// Javalin config
-		//
-		// Javalin routes
-		app.get("/", ctx -> ctx.result("Hello World"));
-		// start Javalin server using port variable
-		app.start(port);
-
-		// ! ============ DEBUG Classes
-		Employee testEmployee = new Employee("test@email.com", "abc123");
-		Manager testManager = new Manager("test2@email.com", "abc123", true);
-		Ticket testTicket = new Ticket(10.00, "Test description");
-
-		System.out.println(testEmployee);
-		System.out.println(testManager);
-		System.out.println(testTicket);
-
-		// test that status only works if it is "approved" or "denied"
-		// testTicket.setStatus("approved");
-		testTicket.setStatus("APPROVED");
-		// testTicket.setStatus("denied");
-		// testTicket.setStatus("DENIED");
-		// testTicket.setStatus("test");
-		System.out.println(testTicket);
-
+		app = Javalin.create();
+		// add Javalin route controllers
+		// ! DEBUG - Test EmployeeController
+		configure(new TicketController(), new EmployeeController());
+		// start Javalin server on port 4000
+		app.start(4000);
 	}
 
+	public static void configure(Controller... controllers) {
+		for (Controller controller : controllers) {
+			controller.addRoutes(app);
+		}
+	}
 }
