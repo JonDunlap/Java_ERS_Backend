@@ -10,8 +10,8 @@ public class EmployeeController implements Controller {
 	private EmployeeService employeeService = new EmployeeService();
 
 	private Handler getEmployee = ctx -> {
-		Employee employee = ctx.bodyAsClass(Employee.class);
-		employeeService.getEmployee(employee);
+		Employee tempEmployee = ctx.bodyAsClass(Employee.class);
+		Employee employee = employeeService.getEmployee(tempEmployee);
 
 		ctx.json(employee);
 		ctx.status(200);
