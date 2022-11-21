@@ -1,11 +1,32 @@
 package com.revature.controllers;
 
+import java.util.List;
+
+import com.revature.models.Ticket;
+import com.revature.services.TicketService;
+
 import io.javalin.Javalin;
+import io.javalin.http.Handler;
 
 public class TicketController implements Controller {
+	private TicketService ticketService = new TicketService();
+
+	private Handler getTicketsHandler = ctx -> {
+		List<Ticket> list = ticketService.getTickets();
+
+		ctx.json(list);
+		ctx.status(200);
+	};
+
+	private Handler addTicketHandler = ctx -> {
+		Ticket ticket = ctx.bodyAsClass(Ticket.class);
+		ticketService.addTicket(ticket);
+		ctx.status(201);
+	};
+
 	@Override
 	public void addRoutes(Javalin app) {
-		// TODO Auto-generated method stub
-		// add routes to GET, POST, PUT, DELETE? tickets
+		app.get("/ticket", getTicketsHandler);
+		app.post("/ticket", addTicketHandler);
 	}
 }
