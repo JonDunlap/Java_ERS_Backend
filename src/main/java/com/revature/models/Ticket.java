@@ -6,21 +6,31 @@ package com.revature.models;
 public class Ticket {
 
 	// ticket variables
-	double amount;
-	String description;
-	String status;
-	Employee employee;
+	private int id;
+	private double amount;
+	private String description;
+	private String status;
+	private int employeeID;
 
-	public Ticket(double amount, String description, String status, Employee employee) {
+	public Ticket(int id, double amount, String description, String status, int employeeID) {
 		super();
+		this.id = id;
 		this.amount = amount;
 		this.description = description;
 		this.status = status;
-		this.employee = employee;
+		this.employeeID = employeeID;
 	}
 
 	public Ticket() {
 		super();
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public double getAmount() {
@@ -47,24 +57,25 @@ public class Ticket {
 		this.status = status;
 	}
 
-	public Employee getEmployee() {
-		return employee;
+	public int getEmployeeID() {
+		return employeeID;
 	}
 
-	public void setEmployee(Employee employee) {
-		this.employee = employee;
+	public void setEmployeeID(int employeeID) {
+		this.employeeID = employeeID;
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + id;
 		long temp;
 		temp = Double.doubleToLongBits(amount);
 		result = prime * result + (int) (temp ^ (temp >>> 32));
 		result = prime * result + ((description == null) ? 0 : description.hashCode());
 		result = prime * result + ((status == null) ? 0 : status.hashCode());
-		result = prime * result + ((employee == null) ? 0 : employee.hashCode());
+		result = prime * result + employeeID;
 		return result;
 	}
 
@@ -77,6 +88,8 @@ public class Ticket {
 		if (getClass() != obj.getClass())
 			return false;
 		Ticket other = (Ticket) obj;
+		if (id != other.id)
+			return false;
 		if (Double.doubleToLongBits(amount) != Double.doubleToLongBits(other.amount))
 			return false;
 		if (description == null) {
@@ -89,18 +102,15 @@ public class Ticket {
 				return false;
 		} else if (!status.equals(other.status))
 			return false;
-		if (employee == null) {
-			if (other.employee != null)
-				return false;
-		} else if (!employee.equals(other.employee))
+		if (employeeID != other.employeeID)
 			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "Ticket [amount=" + amount + ", description=" + description + ", status=" + status + ", employee=" + employee
-				+ "]";
+		return "Ticket [id=" + id + ", amount=" + amount + ", description=" + description + ", status=" + status
+				+ ", employeeID=" + employeeID + "]";
 	}
 
 	// create variable for formatting currency
