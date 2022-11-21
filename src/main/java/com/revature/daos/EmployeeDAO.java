@@ -14,11 +14,16 @@ public class EmployeeDAO {
 		employees.add(new Employee(2, "test2@email.com", "abc123", true));
 	}
 
+	// ! DEBUG
+	public List<Employee> getEmployees() {
+		return employees;
+	}
+
 	// ? pass email/password or pass Employee?
-	public Employee getEmployee(String email, String password) {
-		for (Employee employee : employees) {
-			if (employee.getEmail().matches(email) && employee.getPassword().matches(password)) {
-				return employee;
+	public Employee getEmployee(Employee employee) {
+		for (Employee emp : employees) {
+			if (emp.getEmail().matches(employee.getEmail()) && emp.getPassword().matches(employee.getPassword())) {
+				return emp;
 			}
 		}
 
