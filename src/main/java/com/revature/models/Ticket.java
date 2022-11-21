@@ -106,15 +106,6 @@ public class Ticket {
 	// create variable for formatting currency
 	// NumberFormat formatter = NumberFormat.getCurrencyInstance(Locale.US);
 
-	// ticket constructor
-	// public Ticket(
-	// double amount, String description) {
-	// super();
-	// this.amount = amount;
-	// this.description = description;
-	// this.status = "pending";
-	// }
-
 	// public method to change default status variable
 	// public void setStatus(String status) {
 	// // ? possibly move this logic into the business logic class
