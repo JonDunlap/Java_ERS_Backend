@@ -19,6 +19,7 @@ public class Ticket {
 		this.description = description;
 		this.status = status;
 		this.employeeID = employeeID;
+		// TODO - add managerID for resolving ticket
 	}
 
 	public Ticket() {

@@ -20,6 +20,7 @@ public class EmployeeDAO {
 	}
 
 	// ? does this go in service or here?
+	// TODO - move employee validation to EmployeeService
 	public Employee getEmployee(Employee employee) {
 		for (Employee emp : employees) {
 			if (emp.getEmail().matches(employee.getEmail()) && emp.getPassword().matches(employee.getPassword())) {

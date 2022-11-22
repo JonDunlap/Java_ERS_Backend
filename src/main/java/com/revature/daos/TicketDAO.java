@@ -24,4 +24,6 @@ public class TicketDAO {
 	public void addTicket(Ticket ticket) {
 		tickets.add(ticket);
 	}
+
+	// TODO - add function to change status of ticket (pending -> approved/denied)
 }

@@ -18,4 +18,7 @@ public class TicketService {
 		ticket.setId(newID);
 		ticketDAO.addTicket(ticket);
 	}
+
+	// TODO - add function to change status of ticket (pending -> approved/denied)
+	// TODO - add resolver to ticket (managerID of who completed the ticket)
 }

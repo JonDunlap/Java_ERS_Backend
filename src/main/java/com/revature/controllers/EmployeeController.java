@@ -22,6 +22,8 @@ public class EmployeeController implements Controller {
 		ctx.status(201);
 	};
 
+	// TODO - add logout route
+	// TODO - save employee to session storage
 	@Override
 	public void addRoutes(Javalin app) {
 		app.get("/employee", getEmployee);
