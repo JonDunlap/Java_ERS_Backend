@@ -12,6 +12,11 @@ public class EmployeeService {
 		return employeeDAO.getEmployees();
 	}
 
+	// TODO - move validation of employee to Service
+	// TODO - use .matches() to see if email already exists
+	// TODO - if email exists return error, else return employee object
+	// TODO - use employee object inside of session for session validation and
+	// TODO - ticket creation
 	public Employee getEmployee(Employee employee) {
 		return employeeDAO.getEmployee(employee);
 	}

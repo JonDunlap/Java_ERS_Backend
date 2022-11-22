@@ -19,8 +19,9 @@ public class EmployeeDAO {
 		return employees;
 	}
 
-	// ? does this go in service or here?
 	// TODO - move employee validation to EmployeeService
+	// ? Do I need this function at all? or just return all employees to
+	// ? EmployeeService then return the specified employee object from the service
 	public Employee getEmployee(Employee employee) {
 		for (Employee emp : employees) {
 			if (emp.getEmail().matches(employee.getEmail()) && emp.getPassword().matches(employee.getPassword())) {
