@@ -1,25 +1,22 @@
 package com.revature.models;
 
-// import java.text.NumberFormat;
-// import java.util.Locale;
-
 public class Ticket {
-
 	// ticket variables
 	private int id;
 	private double amount;
 	private String description;
 	private String status;
 	private int employeeID;
+	private int resolvingManagerID;
 
-	public Ticket(int id, double amount, String description, String status, int employeeID) {
+	public Ticket(int id, double amount, String description, String status, int employeeID, int resolvingManagerID) {
 		super();
 		this.id = id;
 		this.amount = amount;
 		this.description = description;
 		this.status = status;
 		this.employeeID = employeeID;
-		// TODO - add managerID for resolving ticket
+		this.resolvingManagerID = resolvingManagerID;
 	}
 
 	public Ticket() {
@@ -66,6 +63,14 @@ public class Ticket {
 		this.employeeID = employeeID;
 	}
 
+	public int getResolvingManagerID() {
+		return resolvingManagerID;
+	}
+
+	public void setResolvingManagerID(int resolvingManagerID) {
+		this.resolvingManagerID = resolvingManagerID;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -77,6 +82,7 @@ public class Ticket {
 		result = prime * result + ((description == null) ? 0 : description.hashCode());
 		result = prime * result + ((status == null) ? 0 : status.hashCode());
 		result = prime * result + employeeID;
+		result = prime * result + resolvingManagerID;
 		return result;
 	}
 
@@ -105,27 +111,14 @@ public class Ticket {
 			return false;
 		if (employeeID != other.employeeID)
 			return false;
+		if (resolvingManagerID != other.resolvingManagerID)
+			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
 		return "Ticket [id=" + id + ", amount=" + amount + ", description=" + description + ", status=" + status
-				+ ", employeeID=" + employeeID + "]";
+				+ ", employeeID=" + employeeID + ", resolvingManagerID=" + resolvingManagerID + "]";
 	}
-
-	// create variable for formatting currency
-	// NumberFormat formatter = NumberFormat.getCurrencyInstance(Locale.US);
-
-	// public method to change default status variable
-	// public void setStatus(String status) {
-	// // ? possibly move this logic into the business logic class
-	// if (status.toLowerCase().equals("approved") ||
-	// status.toLowerCase().equals("denied")) {
-	// this.status = status.toLowerCase();
-	// } else {
-	// throw new Error("Invalid status type, select either approved or denied.");
-	// }
-	// }
-
 }
