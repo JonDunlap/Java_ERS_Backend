@@ -10,10 +10,10 @@ public class TicketDAO {
 	private List<Ticket> tickets = new ArrayList<>();
 
 	public TicketDAO() {
-		tickets.add(new Ticket(1, 25.00, "Test pending", "pending", 1));
-		tickets.add(new Ticket(2, 50.00, "Test approved", "approved", 1));
-		tickets.add(new Ticket(3, 50.00, "Test denied", "denied", 1));
-		tickets.add(new Ticket(4, 50.00, "Test pending 2", "pending", 1));
+		tickets.add(new Ticket(1, 25.00, "Test pending", "pending", 1, 0));
+		tickets.add(new Ticket(2, 50.00, "Test approved", "approved", 1, 2));
+		tickets.add(new Ticket(3, 50.00, "Test denied", "denied", 1, 2));
+		tickets.add(new Ticket(4, 50.00, "Test pending 2", "pending", 1, 0));
 	}
 
 	// ? Functionality to get pending tickets for managers or employee's tickets
