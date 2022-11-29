@@ -26,4 +26,8 @@ public class Main {
 			controller.addRoutes(app);
 		}
 	}
+
+	// TODO - add logout route
+	// TODO - save employee to session storage
+
 }
