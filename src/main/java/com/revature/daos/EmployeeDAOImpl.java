@@ -1,15 +1,38 @@
 package com.revature.daos;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.List;
 
 import com.revature.models.Employee;
+import com.revature.utils.ConnectionUtil;
 
 public class EmployeeDAOImpl implements EmployeeDAO {
 
 	@Override
-	public void addEmployee(Employee employee) {
-		// TODO Auto-generated method stub
+	public boolean addEmployee(Employee employee) {
+		try (Connection connection = ConnectionUtil.getConnection()) {
+			String sql = "INSERT INTO employees (email, PASSWORD, is_manager) VALUES (?,?,?)";
 
+			PreparedStatement statement = connection.prepareStatement(sql);
+
+			int index = 0;
+			statement.setString(++index, employee.getEmail());
+			statement.setString(++index, employee.getPassword());
+			if (employee.isManager()) {
+				statement.setBoolean(++index, employee.isManager());
+			} else {
+				statement.setBoolean(++index, false);
+			}
+
+			statement.execute();
+
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 
 	@Override
@@ -24,15 +47,10 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 		return null;
 	}
 
-	// public List<Employee> getEmployees() {
-	// // TODO
-	// return null;
-	// }
-
 	// // TODO - move employee validation to EmployeeService
 	// // ? Do I need this function at all? or just return all employees to
 	// // ? EmployeeService then return the specified employee object from the
-	// service
+	// // ? service
 	// public Employee getEmployee(Employee employee) {
 	// for (Employee emp : employees) {
 	// if (emp.getEmail().matches(employee.getEmail()) &&
