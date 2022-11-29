@@ -1,38 +1,13 @@
 package com.revature.daos;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.revature.models.Employee;
 
-public class EmployeeDAO {
-	// ! DEBUG - temp. employees
-	private static List<Employee> employees = new ArrayList<>();
+public interface EmployeeDAO {
+	public abstract List<Employee> getEmployees();
 
-	public EmployeeDAO() {
-		employees.add(new Employee(1, "test@email.com", "abc123", false));
-		employees.add(new Employee(2, "test2@email.com", "abc123", true));
-	}
+	public abstract Employee getEmployee(int id);
 
-	// ! DEBUG - possibly keep, may need all employees to verify email doesn't exist
-	public List<Employee> getEmployees() {
-		return employees;
-	}
-
-	// TODO - move employee validation to EmployeeService
-	// ? Do I need this function at all? or just return all employees to
-	// ? EmployeeService then return the specified employee object from the service
-	public Employee getEmployee(Employee employee) {
-		for (Employee emp : employees) {
-			if (emp.getEmail().matches(employee.getEmail()) && emp.getPassword().matches(employee.getPassword())) {
-				return emp;
-			}
-		}
-
-		throw new Error("Email and password do not match any employees");
-	}
-
-	public void addEmployee(Employee employee) {
-		employees.add(employee);
-	}
+	public abstract void addEmployee(Employee employee);
 }
