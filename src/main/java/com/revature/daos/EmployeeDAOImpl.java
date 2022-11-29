@@ -77,10 +77,12 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 
 			while (resultSet.next()) {
 				Employee employee = new Employee();
+
 				employee.setId(resultSet.getInt("employee_id"));
 				employee.setEmail(resultSet.getString("email"));
 				employee.setPassword(resultSet.getString("password"));
 				employee.setManager(resultSet.getBoolean("is_manager"));
+
 				employees.add(employee);
 			}
 
