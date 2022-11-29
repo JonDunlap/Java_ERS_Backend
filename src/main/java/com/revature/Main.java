@@ -16,7 +16,6 @@ public class Main {
 		// Create Javalin server
 		app = Javalin.create();
 		// add Javalin route controllers
-		// ! DEBUG - Test EmployeeController
 		configure(new TicketController(), new EmployeeController());
 		// start Javalin server on port 4000
 		app.start(4000);
