@@ -19,6 +19,12 @@ public class Ticket {
 		this.resolvingManagerID = resolvingManagerID;
 	}
 
+	public Ticket(double amount, String description, String status) {
+		this.amount = amount;
+		this.description = description;
+		this.status = status;
+	}
+
 	public Ticket() {
 		super();
 	}

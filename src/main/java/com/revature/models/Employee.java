@@ -15,6 +15,13 @@ public class Employee {
 		this.isManager = isManager;
 	}
 
+	public Employee(String email, String password, boolean isManager) {
+		super();
+		this.email = email;
+		this.password = password;
+		this.isManager = isManager;
+	}
+
 	public Employee() {
 		super();
 	}
