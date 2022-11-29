@@ -2,7 +2,9 @@ package com.revature.daos;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 
 import com.revature.models.Employee;
@@ -37,8 +39,28 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 
 	@Override
 	public Employee getEmployee(int id) {
-		// TODO Auto-generated method stub
-		return null;
+		try (Connection connection = ConnectionUtil.getConnection()) {
+			String sql = "SELECT * FROM employees WHERE id=" + id + ";";
+
+			Statement statement = connection.createStatement();
+
+			ResultSet resultSet = statement.executeQuery(sql);
+
+			Employee employee = new Employee();
+
+			if (resultSet.next()) {
+				employee.setId(resultSet.getInt("employee_id"));
+				employee.setEmail(resultSet.getString("email"));
+				employee.setPassword(resultSet.getString("password"));
+				employee.setManager(resultSet.getBoolean("is_manager"));
+			}
+
+			return employee;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	@Override
