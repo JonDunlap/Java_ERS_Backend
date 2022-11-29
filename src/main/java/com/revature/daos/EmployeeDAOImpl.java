@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.revature.models.Employee;
@@ -65,26 +66,29 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 
 	@Override
 	public List<Employee> getEmployees() {
-		// TODO Auto-generated method stub
-		return null;
+		try (Connection connection = ConnectionUtil.getConnection()) {
+			String sql = "SELECT * FROM employees";
+
+			Statement statement = connection.createStatement();
+
+			ResultSet resultSet = statement.executeQuery(sql);
+
+			List<Employee> employees = new ArrayList<>();
+
+			while (resultSet.next()) {
+				Employee employee = new Employee();
+				employee.setId(resultSet.getInt("employee_id"));
+				employee.setEmail(resultSet.getString("email"));
+				employee.setPassword(resultSet.getString("password"));
+				employee.setManager(resultSet.getBoolean("is_manager"));
+				employees.add(employee);
+			}
+
+			return employees;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
-
-	// // TODO - move employee validation to EmployeeService
-	// // ? Do I need this function at all? or just return all employees to
-	// // ? EmployeeService then return the specified employee object from the
-	// // ? service
-	// public Employee getEmployee(Employee employee) {
-	// for (Employee emp : employees) {
-	// if (emp.getEmail().matches(employee.getEmail()) &&
-	// emp.getPassword().matches(employee.getPassword())) {
-	// return emp;
-	// }
-	// }
-
-	// throw new Error("Email and password do not match any employees");
-	// }
-
-	// public void addEmployee(Employee employee) {
-	// employees.add(employee);
-	// }
 }
