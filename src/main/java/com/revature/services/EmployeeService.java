@@ -18,7 +18,7 @@ public class EmployeeService {
 		return employeeDAO.getEmployee(id);
 	}
 
-	public boolean addEmployee(Employee employee) {
+	public boolean addEmployee(Employee employee) throws EmployeeExistsException {
 		List<Employee> employees = getEmployees();
 
 		for (Employee emp : employees) {
