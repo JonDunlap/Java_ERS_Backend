@@ -19,10 +19,13 @@ public class Ticket {
 		this.resolvingManagerID = resolvingManagerID;
 	}
 
-	public Ticket(double amount, String description, String status) {
+	public Ticket(int id, double amount, String description, String status, int employeeID) {
+		super();
+		this.id = id;
 		this.amount = amount;
 		this.description = description;
 		this.status = status;
+		this.employeeID = employeeID;
 	}
 
 	public Ticket() {
