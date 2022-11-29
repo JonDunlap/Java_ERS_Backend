@@ -9,7 +9,7 @@ public interface TicketDAO {
 
 	public abstract List<Ticket> getPendingTickets();
 
-	public abstract boolean addTicket(Ticket ticket);
+	public abstract boolean addTicket(Ticket ticket, int employeeID);
 
 	public abstract boolean updateTicket(Ticket ticket, int managerID);
 }
