@@ -9,5 +9,5 @@ public interface EmployeeDAO {
 
 	public abstract Employee getEmployee(int id);
 
-	public abstract void addEmployee(Employee employee);
+	public abstract boolean addEmployee(Employee employee);
 }
