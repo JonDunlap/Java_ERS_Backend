@@ -3,22 +3,30 @@ package com.revature.services;
 import java.util.List;
 
 import com.revature.daos.TicketDAO;
+import com.revature.daos.TicketDAOImpl;
 import com.revature.models.Ticket;
 
 public class TicketService {
-	private TicketDAO ticketDAO = new TicketDAO();
+	private TicketDAO ticketDAO = new TicketDAOImpl();
 
-	public List<Ticket> getTickets() {
-		return ticketDAO.getAllTickets();
+	// TODO - get employeeID from SessionStorage
+	public boolean addTicket(Ticket ticket, int employeeID) {
+		return ticketDAO.addTicket(ticket, employeeID);
 	}
 
-	public void addTicket(Ticket ticket) {
-		// ! DEBUG - use salt/hash method for generating employee IDs
-		int newID = getTickets().size() + 1;
-		ticket.setId(newID);
-		ticketDAO.addTicket(ticket);
+	// TODO - get employeeID from SessionStorage
+	public List<Ticket> getEmployeeTickets(int employeeID) {
+		return ticketDAO.getEmployeeTickets(employeeID);
 	}
 
-	// TODO - add function to change status of ticket (pending -> approved/denied)
-	// TODO - add resolver to ticket (managerID of who completed the ticket)
+	// TODO - verify user is manager from SessionStorage
+	public List<Ticket> getPendingTickets() {
+		return ticketDAO.getPendingTickets();
+	}
+
+	// TODO - get managerID from SessionStorage
+	// TODO - check ticket status is either approved/denied
+	public boolean updateTicket(Ticket ticket, int managerID) {
+		return ticketDAO.updateTicket(ticket, managerID);
+	}
 }
