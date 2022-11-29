@@ -11,5 +11,5 @@ public interface TicketDAO {
 
 	public abstract boolean addTicket(Ticket ticket);
 
-	public abstract boolean updateTicket(Ticket ticket);
+	public abstract boolean updateTicket(int ticketID, int managerID);
 }
