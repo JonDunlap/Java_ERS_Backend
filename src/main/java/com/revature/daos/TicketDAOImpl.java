@@ -2,7 +2,10 @@ package com.revature.daos;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.revature.models.Ticket;
@@ -40,8 +43,30 @@ public class TicketDAOImpl implements TicketDAO {
 
 	@Override
 	public List<Ticket> getEmployeeTickets(int id) {
-		// TODO Auto-generated method stub
-		return null;
+		try (Connection connection = ConnectionUtil.getConnection()) {
+			String sql = "SELECT  * FROM tickets WHERE employee_id=" + id + ";";
+
+			Statement statement = connection.createStatement();
+
+			ResultSet resultSet = statement.executeQuery(sql);
+
+			List<Ticket> tickets = new ArrayList<>();
+
+			while (resultSet.next()) {
+				Ticket ticket = new Ticket();
+				ticket.setId(resultSet.getInt("ticket_id"));
+				ticket.setAmount(resultSet.getDouble("amount"));
+				ticket.setDescription(resultSet.getString("description"));
+				ticket.setStatus(resultSet.getString("status"));
+				ticket.setEmployeeID(resultSet.getInt("employee_id"));
+				ticket.setResolvingManagerID(resultSet.getInt("resolving_manager_id"));
+			}
+
+			return tickets;
+		} catch (SQLException e) {
+			e.getStackTrace();
+			return null;
+		}
 	}
 
 	@Override
