@@ -29,5 +29,4 @@ public class Main {
 
 	// TODO - add logout route
 	// TODO - save employee to session storage
-
 }
