@@ -2,33 +2,44 @@ package com.revature.controllers;
 
 import java.util.List;
 
+import com.revature.models.Employee;
 import com.revature.models.Ticket;
 import com.revature.services.TicketService;
 
 import io.javalin.Javalin;
 import io.javalin.http.Handler;
+import jakarta.servlet.http.HttpSession;
 
 public class TicketController implements Controller {
 	private TicketService ticketService = new TicketService();
 
 	Handler addTicket = ctx -> {
-		String idString = ctx.pathParam("id");
-		Ticket ticket = ctx.bodyAsClass(Ticket.class);
+		// get the current session object without creating one if it doesn't already
+		// exist
+		HttpSession session = ctx.req().getSession(false);
+
+		// check if session is null, if so send 401 status
+		if (session == null)
+			ctx.status(401);
+
+		Employee employee = (Employee) session.getAttribute("employee");
 
 		int id = 0;
 
-		try {
-			id = Integer.parseInt(idString);
-		} catch (NumberFormatException e) {
-			ctx.status(422);
-			return;
-		}
+		// check if the employee object has and ID, if not send 403 status
+		if (employee.getId() == 0)
+			ctx.status(403);
 
-		if (ticketService.addTicket(ticket, id)) {
-			ctx.status(201);
-		} else {
+		id = employee.getId();
+
+		Ticket ticket = ctx.bodyAsClass(Ticket.class);
+
+		// if there is an error adding the ticket, send 400 status
+		if (!ticketService.addTicket(ticket, id))
 			ctx.status(400);
-		}
+
+		// otherwise all checks passed and the ticket was added, send 201 status
+		ctx.status(201);
 	};
 
 	Handler getEmployeeTickets = ctx -> {
@@ -56,6 +67,7 @@ public class TicketController implements Controller {
 		ctx.status(200);
 	};
 
+	// TODO - check that the status is either approved/denied
 	Handler updateTicket = ctx -> {
 		String idString = ctx.pathParam("id");
 		Ticket ticket = ctx.bodyAsClass(Ticket.class);
@@ -76,17 +88,17 @@ public class TicketController implements Controller {
 		}
 	};
 
-	// TODO - protect ticket/pending route
 	@Override
 	public void addRoutes(Javalin app) {
-		// app.get("/ticket", getTicketsHandler);
-		// app.post("/ticket", addTicketHandler);
+		// ! DEBUG - use logged in user id to get tickets
 		app.get("/ticket/{id}", getEmployeeTickets);
 		// ! DEBUG, change to use SessionStorage to get managerID
+		// TODO - prevent managers from seeing/editing their own pending tickets
+		// TODO - protect ticket/pending route
 		app.get("/ticket/pending/{id}", getPendingTickets);
-		// ! DEBUG, use SessionStorage to get employeeID
 		app.post("/ticket/{id}", addTicket);
 		// ! DEBUG, use SessionStorage to get managerID
+		// TODO - prevent managers from seeing/editing their own pending tickets
 		app.patch("/ticket/{id}", updateTicket);
 	}
 }
