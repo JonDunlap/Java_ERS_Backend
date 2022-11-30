@@ -1,6 +1,7 @@
 package com.revature.controllers;
 
 import java.util.List;
+import java.util.ArrayList;
 
 import com.revature.models.Employee;
 import com.revature.models.Ticket;
@@ -68,44 +69,80 @@ public class TicketController implements Controller {
 	};
 
 	Handler getPendingTickets = ctx -> {
-		List<Ticket> tickets = ticketService.getPendingTickets();
+		// get the current session object without creating one if it doesn't already
+		// exist
+		HttpSession session = ctx.req().getSession(false);
 
-		ctx.json(tickets);
+		// check if session is null, if so send 401 status
+		if (session == null)
+			ctx.status(401);
+
+		Employee employee = (Employee) session.getAttribute("employee");
+
+		// check that the employee is a manager, if not send 403 status
+		if (!employee.isManager())
+			ctx.status(403);
+
+		// if they are a manager get the list of all pending tickets
+		List<Ticket> tickets = ticketService.getPendingTickets();
+		
+		// filter the tickets list and add only tickets that don't belong to the current manager
+		// send the filtered tickets as json, send 200 status
+		List<Ticket> filteredTickets = new ArrayList<>();
+		for (Ticket ticket : tickets){
+			if(ticket.getEmployeeID() != employee.getId()) 
+				filteredTickets.add(ticket);
+		}
+		ctx.json(filteredTickets);
 		ctx.status(200);
 	};
 
-	// TODO - check that the status is either approved/denied
 	Handler updateTicket = ctx -> {
-		String idString = ctx.pathParam("id");
-		Ticket ticket = ctx.bodyAsClass(Ticket.class);
+		// get the current session object without creating one if it doesn't already
+		// exist
+		HttpSession session = ctx.req().getSession(false);
 
+		// check if session is null, if so send 401 status
+		if (session == null)
+			ctx.status(401);
+
+		Employee employee = (Employee) session.getAttribute("employee");
+
+		// check that the employee is a manager, if not send 403 status
+		if (!employee.isManager())
+			ctx.status(403);
+		
 		int id = 0;
 
-		try {
-			id = Integer.parseInt(idString);
-		} catch (NumberFormatException e) {
-			ctx.status(422);
-			return;
-		}
+		// check if the employee object has an ID, if not send 403 status
+		if (employee.getId() == 0)
+			ctx.status(403);
 
-		if (ticketService.updateTicket(ticket, id)) {
-			ctx.status(201);
-		} else {
+		id = employee.getId();
+
+		Ticket ticket = ctx.bodyAsClass(Ticket.class);
+
+		// check if the manager is trying to edit their own ticket, if so send 403 status
+		if(ticket.getEmployeeID() == id)
+			ctx.status(403);
+		
+		// check that the status of the ticket is either approved/denied, if not send 400 status
+		if(!ticket.getStatus().matches("approved") || !ticket.getStatus().matches("denied"))
 			ctx.status(400);
-		}
+			
+		// if there is an error adding the ticket, send 400 status
+		if (ticketService.updateTicket(ticket, id))
+			ctx.status(400);
+		
+		// otherwise all checks passed and the ticket was added, send 201 status
+		ctx.status(201);
 	};
 
 	@Override
 	public void addRoutes(Javalin app) {
-		// ! DEBUG - use logged in user id to get tickets
 		app.get("/ticket", getEmployeeTickets);
-		// ! DEBUG, change to use SessionStorage to get managerID
-		// TODO - prevent managers from seeing/editing their own pending tickets
-		// TODO - protect ticket/pending route
-		app.get("/ticket/pending/{id}", getPendingTickets);
+		app.get("/ticket/pending", getPendingTickets);
 		app.post("/ticket", addTicket);
-		// ! DEBUG, use SessionStorage to get managerID
-		// TODO - prevent managers from seeing/editing their own pending tickets
-		app.patch("/ticket/{id}", updateTicket);
+		app.patch("/ticket", updateTicket);
 	}
 }
