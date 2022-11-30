@@ -29,4 +29,7 @@ public class Main {
 
 	// TODO - add logout route
 	// TODO - save employee to session storage
+	// TODO - add protected routes
+	// TODO - attach employee/manager id to required routes
+	// TODO - prevent managers from updating/approving their own tickets
 }
