@@ -41,7 +41,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 	@Override
 	public Employee getEmployee(int id) {
 		try (Connection connection = ConnectionUtil.getConnection()) {
-			String sql = "SELECT * FROM employees WHERE id=" + id + ";";
+			String sql = "SELECT * FROM employees WHERE employee_id=" + id + ";";
 
 			Statement statement = connection.createStatement();
 
