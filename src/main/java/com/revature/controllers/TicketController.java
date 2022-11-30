@@ -76,8 +76,6 @@ public class TicketController implements Controller {
 		}
 	};
 
-	// TODO - ticket/pending route to see pending tickets as a manager
-	// TODO - patch /ticket to update tickets (pending/approved/denied)
 	// TODO - protect ticket/pending route
 	@Override
 	public void addRoutes(Javalin app) {

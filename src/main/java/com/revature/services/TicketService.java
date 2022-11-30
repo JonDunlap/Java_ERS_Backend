@@ -20,6 +20,7 @@ public class TicketService {
 	}
 
 	// TODO - verify user is manager from SessionStorage
+	// TODO - prevent managers from seeing their own tickets
 	public List<Ticket> getPendingTickets() {
 		return ticketDAO.getPendingTickets();
 	}
