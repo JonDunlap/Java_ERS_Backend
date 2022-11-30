@@ -26,7 +26,7 @@ public class TicketController implements Controller {
 
 		int id = 0;
 
-		// check if the employee object has and ID, if not send 403 status
+		// check if the employee object has an ID, if not send 403 status
 		if (employee.getId() == 0)
 			ctx.status(403);
 
@@ -43,19 +43,26 @@ public class TicketController implements Controller {
 	};
 
 	Handler getEmployeeTickets = ctx -> {
-		String idString = ctx.pathParam("id");
+		// get the current session object without creating one if it doesn't already
+		// exist
+		HttpSession session = ctx.req().getSession(false);
+
+		// check if session is null, if so send 401 status
+		if (session == null)
+			ctx.status(401);
+
+		Employee employee = (Employee) session.getAttribute("employee");
 
 		int id = 0;
 
-		try {
-			id = Integer.parseInt(idString);
-		} catch (NumberFormatException e) {
-			ctx.status(422);
-			return;
-		}
+		// check if the employee object has an ID, if not send 403 status
+		if (employee.getId() == 0)
+			ctx.status(403);
 
+		id = employee.getId();
+
+		// get employee tickets with employee's ID, return them as json, with status 200
 		List<Ticket> tickets = ticketService.getEmployeeTickets(id);
-
 		ctx.json(tickets);
 		ctx.status(200);
 	};
@@ -91,12 +98,12 @@ public class TicketController implements Controller {
 	@Override
 	public void addRoutes(Javalin app) {
 		// ! DEBUG - use logged in user id to get tickets
-		app.get("/ticket/{id}", getEmployeeTickets);
+		app.get("/ticket", getEmployeeTickets);
 		// ! DEBUG, change to use SessionStorage to get managerID
 		// TODO - prevent managers from seeing/editing their own pending tickets
 		// TODO - protect ticket/pending route
 		app.get("/ticket/pending/{id}", getPendingTickets);
-		app.post("/ticket/{id}", addTicket);
+		app.post("/ticket", addTicket);
 		// ! DEBUG, use SessionStorage to get managerID
 		// TODO - prevent managers from seeing/editing their own pending tickets
 		app.patch("/ticket/{id}", updateTicket);
