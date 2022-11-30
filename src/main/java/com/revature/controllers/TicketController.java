@@ -82,8 +82,11 @@ public class TicketController implements Controller {
 		// app.get("/ticket", getTicketsHandler);
 		// app.post("/ticket", addTicketHandler);
 		app.get("/ticket/{id}", getEmployeeTickets);
-		app.get("/ticket/pending", getPendingTickets);
-		app.post("/ticket", addTicket);
-		app.patch("/ticket", updateTicket);
+		// ! DEBUG, change to use SessionStorage to get managerID
+		app.get("/ticket/pending/{id}", getPendingTickets);
+		// ! DEBUG, use SessionStorage to get employeeID
+		app.post("/ticket/{id}", addTicket);
+		// ! DEBUG, use SessionStorage to get managerID
+		app.patch("/ticket/{id}", updateTicket);
 	}
 }

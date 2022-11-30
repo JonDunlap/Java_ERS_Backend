@@ -52,7 +52,9 @@ public class EmployeeController implements Controller {
 
 	@Override
 	public void addRoutes(Javalin app) {
+		// ! DEBUG - remove routes, methods only used for login functionality
 		app.get("/employee", getEmployees);
+		// ! DEBUG - remove routes, methods only used for login functionality
 		app.get("/employee/{id}", getEmployee);
 		app.post("/employee", addEmployee);
 	}
