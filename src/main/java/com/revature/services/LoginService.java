@@ -10,11 +10,15 @@ public class LoginService {
 	public Employee login(String email, String password) {
 		List<Employee> employees = employeeService.getEmployees();
 
-		for (Employee emp : employees) {
-			if (emp.getEmail().matches(email)) {
-				return emp;
+		try {
+			for (Employee emp : employees) {
+				if (emp.getEmail().matches(email) && emp.getPassword().matches(password)) {
+					return emp;
+				}
 			}
+			return null;
+		} catch (NullPointerException e) {
+			return null;
 		}
-		return null;
 	}
 }
