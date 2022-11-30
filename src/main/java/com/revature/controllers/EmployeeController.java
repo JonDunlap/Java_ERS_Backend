@@ -41,7 +41,7 @@ public class EmployeeController implements Controller {
 
 		try {
 			if (employeeService.addEmployee(employee)) {
-				ctx.status(200);
+				ctx.status(201);
 			} else {
 				ctx.status(500);
 			}
