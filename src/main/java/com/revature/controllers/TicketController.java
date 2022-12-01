@@ -20,18 +20,18 @@ public class TicketController implements Controller {
 		HttpSession session = ctx.req().getSession(false);
 
 		// check if session is null, if so send 401 status
-		if (session == null)
+		if (session == null) {
 			ctx.status(401);
+			return;
+		}
 
 		Employee employee = (Employee) session.getAttribute("employee");
 
-		int id = 0;
-
 		// check if the employee object has an ID, if not send 403 status
-		if (employee.getId() == 0)
+		if (employee.getId() == 0) {
 			ctx.status(403);
-
-		id = employee.getId();
+			return;
+		}
 
 		// TODO - add check that body exists
 		Ticket ticket = ctx.bodyAsClass(Ticket.class);
@@ -39,8 +39,10 @@ public class TicketController implements Controller {
 		// TODO - check that amount and description are included
 
 		// if there is an error adding the ticket, send 400 status
-		if (!ticketService.addTicket(ticket, id))
+		if (!ticketService.addTicket(ticket, employee.getId())) {
 			ctx.status(400);
+			return;
+		}
 
 		// otherwise all checks passed and the ticket was added, send 201 status
 		ctx.status(201);
@@ -52,21 +54,21 @@ public class TicketController implements Controller {
 		HttpSession session = ctx.req().getSession(false);
 
 		// check if session is null, if so send 401 status
-		if (session == null)
+		if (session == null) {
 			ctx.status(401);
+			return;
+		}
 
 		Employee employee = (Employee) session.getAttribute("employee");
 
-		int id = 0;
-
 		// check if the employee object has an ID, if not send 403 status
-		if (employee.getId() == 0)
+		if (employee.getId() == 0) {
 			ctx.status(403);
-
-		id = employee.getId();
+			return;
+		}
 
 		// get employee tickets with employee's ID, return them as json, with status 200
-		List<Ticket> tickets = ticketService.getEmployeeTickets(id);
+		List<Ticket> tickets = ticketService.getEmployeeTickets(employee.getId());
 		ctx.json(tickets);
 		ctx.status(200);
 	};
@@ -78,34 +80,33 @@ public class TicketController implements Controller {
 		// exist
 		HttpSession session = ctx.req().getSession(false);
 
-		// check if session is null
-		if (session != null) {
-			Employee employee = (Employee) session.getAttribute("employee");
-
-			// check that the employee is a manager
-			if (employee.isManager()) {
-				// if they are a manager get the list of all pending tickets
-				List<Ticket> tickets = ticketService.getPendingTickets();
-				// create a new ArrayList that will hold all of the filtered tickets
-				List<Ticket> filteredTickets = new ArrayList<>();
-				// filter the tickets list, add only tickets that don't belong to the current
-				// manager
-				for (Ticket ticket : tickets) {
-					if (ticket.getEmployeeID() != employee.getId())
-						filteredTickets.add(ticket);
-				}
-				// send the filtered tickets as json, send 200 status
-				ctx.json(filteredTickets);
-				ctx.status(200);
-
-			} else {
-				// if the employee is not a manager, send 403 status
-				ctx.status(403);
-			}
-		} else {
-			// if session is null send 401 status
+		// check if session is null, if so send 401 status
+		if (session == null) {
 			ctx.status(401);
+			return;
 		}
+
+		Employee employee = (Employee) session.getAttribute("employee");
+
+		// if the employee is not a manager, send 403 status
+		if (employee.isManager()) {
+			ctx.status(403);
+			return;
+		}
+
+		// if they are a manager get the list of all pending tickets
+		List<Ticket> tickets = ticketService.getPendingTickets();
+		// create a new ArrayList that will hold all of the filtered tickets
+		List<Ticket> filteredTickets = new ArrayList<>();
+		// filter the tickets list, add only tickets that don't belong to the current
+		// manager
+		for (Ticket ticket : tickets) {
+			if (ticket.getEmployeeID() != employee.getId())
+				filteredTickets.add(ticket);
+		}
+		// send the filtered tickets as json, send 200 status
+		ctx.json(filteredTickets);
+		ctx.status(200);
 	};
 
 	Handler updateTicket = ctx -> {
@@ -114,42 +115,56 @@ public class TicketController implements Controller {
 		HttpSession session = ctx.req().getSession(false);
 
 		// check if session is null, if so send 401 status
-		if (session == null)
+		if (session == null) {
 			ctx.status(401);
+			return;
+		}
 
 		Employee employee = (Employee) session.getAttribute("employee");
 
-		// check that the employee is a manager, if not send 403 status
-		if (!employee.isManager())
+		// if the employee is not a manager, send 403 status
+		if (employee.isManager()) {
 			ctx.status(403);
-
-		int id = 0;
+			return;
+		}
 
 		// check if the employee object has an ID, if not send 403 status
-		if (employee.getId() == 0)
+		if (employee.getId() == 0) {
 			ctx.status(403);
+			return;
+		}
 
-		id = employee.getId();
+		int id = employee.getId();
 
 		// TODO - add check that body exists
 		Ticket ticket = ctx.bodyAsClass(Ticket.class);
 
+		// TODO - check that the ticket exists in the DB
+		// TODO - check that the ticket they are updating is not already approved/denied
+		// TODO - check the ticket ID against the DB and make sure they aren't
+		// TODO - changing an approved/denied ticket
+
 		// check if the manager is trying to edit their own ticket, if so send 403
 		// status
-		if (ticket.getEmployeeID() == id)
+		if (ticket.getEmployeeID() == id) {
 			ctx.status(403);
+			return;
+		}
 
 		// check that the status of the ticket is either approved/denied, if not send
 		// 400 status
-		if (!ticket.getStatus().matches("approved") || !ticket.getStatus().matches("denied"))
+		if (!ticket.getStatus().matches("approved") || !ticket.getStatus().matches("denied")) {
 			ctx.status(400);
+			return;
+		}
 
-		// TODO - check that the ticket they are updating is not already approved/denied
-		// if there is an error adding the ticket, send 400 status
-		if (ticketService.updateTicket(ticket, id))
+		// if there is an error updating the ticket, send 400 status
+		if (ticketService.updateTicket(ticket, id)) {
 			ctx.status(400);
+			return;
+		}
 
-		// otherwise all checks passed and the ticket was added, send 201 status
+		// otherwise all checks passed and the ticket was updated, send 201 status
 		ctx.status(201);
 	};
 
