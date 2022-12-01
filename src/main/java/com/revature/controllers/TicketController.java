@@ -78,29 +78,34 @@ public class TicketController implements Controller {
 		// exist
 		HttpSession session = ctx.req().getSession(false);
 
-		// check if session is null, if so send 401 status
-		if (session == null)
+		// check if session is null
+		if (session != null) {
+			Employee employee = (Employee) session.getAttribute("employee");
+
+			// check that the employee is a manager
+			if (employee.isManager()) {
+				// if they are a manager get the list of all pending tickets
+				List<Ticket> tickets = ticketService.getPendingTickets();
+				// create a new ArrayList that will hold all of the filtered tickets
+				List<Ticket> filteredTickets = new ArrayList<>();
+				// filter the tickets list, add only tickets that don't belong to the current
+				// manager
+				for (Ticket ticket : tickets) {
+					if (ticket.getEmployeeID() != employee.getId())
+						filteredTickets.add(ticket);
+				}
+				// send the filtered tickets as json, send 200 status
+				ctx.json(filteredTickets);
+				ctx.status(200);
+
+			} else {
+				// if the employee is not a manager, send 403 status
+				ctx.status(403);
+			}
+		} else {
+			// if session is null send 401 status
 			ctx.status(401);
-
-		Employee employee = (Employee) session.getAttribute("employee");
-
-		// check that the employee is a manager, if not send 403 status
-		if (!employee.isManager())
-			ctx.status(403);
-
-		// if they are a manager get the list of all pending tickets
-		List<Ticket> tickets = ticketService.getPendingTickets();
-
-		// filter the tickets list and add only tickets that don't belong to the current
-		// manager
-		// send the filtered tickets as json, send 200 status
-		List<Ticket> filteredTickets = new ArrayList<>();
-		for (Ticket ticket : tickets) {
-			if (ticket.getEmployeeID() != employee.getId())
-				filteredTickets.add(ticket);
 		}
-		ctx.json(filteredTickets);
-		ctx.status(200);
 	};
 
 	Handler updateTicket = ctx -> {
