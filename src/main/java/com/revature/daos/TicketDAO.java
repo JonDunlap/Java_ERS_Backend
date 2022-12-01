@@ -12,4 +12,8 @@ public interface TicketDAO {
 	public abstract boolean addTicket(Ticket ticket, int employeeID);
 
 	public abstract boolean updateTicket(Ticket ticket, int managerID);
+
+	// TODO - add method to get tickets with query: approved/denied/pending
+	// TODO - add method to get ticket by ID
+
 }
