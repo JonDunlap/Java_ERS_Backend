@@ -100,6 +100,8 @@ public class TicketDAOImpl implements TicketDAO {
 		}
 	}
 
+	// TODO - add method to get tickets with query: approved/denied/pending
+
 	/*
 	 * Ticket is passed as parameter so that other parts of the ticket can be
 	 * updated later (status, description, amount, etc..)
