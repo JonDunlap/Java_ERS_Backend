@@ -21,6 +21,7 @@ public class TicketService {
 		return ticketDAO.getPendingTickets();
 	}
 
+	// TODO - add method to get ticket by ticket ID
 	// TODO - add method to get tickets with query: approved/denied/pending
 
 	public boolean updateTicket(Ticket ticket, int managerID) {
