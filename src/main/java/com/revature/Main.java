@@ -2,6 +2,7 @@ package com.revature;
 
 import com.revature.controllers.Controller;
 import com.revature.controllers.EmployeeController;
+import com.revature.controllers.LoginController;
 import com.revature.controllers.TicketController;
 
 import io.javalin.Javalin;
@@ -16,7 +17,7 @@ public class Main {
 		// Create Javalin server
 		app = Javalin.create();
 		// add Javalin route controllers
-		configure(new TicketController(), new EmployeeController());
+		configure(new TicketController(), new EmployeeController(), new LoginController());
 		// start Javalin server on port 4000
 		app.start(4000);
 	}
@@ -26,10 +27,4 @@ public class Main {
 			controller.addRoutes(app);
 		}
 	}
-
-	// TODO - add logout route
-	// TODO - save employee to session storage
-	// TODO - add protected routes
-	// TODO - attach employee/manager id to required routes
-	// TODO - prevent managers from updating/approving their own tickets
 }
