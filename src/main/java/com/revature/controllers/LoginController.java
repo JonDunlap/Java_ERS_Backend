@@ -36,6 +36,11 @@ public class LoginController implements Controller {
 		}
 	};
 
+	// TODO - add method to register user
+	// TODO - make sure that user has email & password
+	// TODO - default to employee unless manager is selected
+	// TODO - make sure that user doesn't exist already
+
 	@Override
 	public void addRoutes(Javalin app) {
 		app.post("/login", login);

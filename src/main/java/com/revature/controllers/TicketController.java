@@ -33,7 +33,10 @@ public class TicketController implements Controller {
 
 		id = employee.getId();
 
+		// TODO - add check that body exists
 		Ticket ticket = ctx.bodyAsClass(Ticket.class);
+
+		// TODO - check that amount and description are included
 
 		// if there is an error adding the ticket, send 400 status
 		if (!ticketService.addTicket(ticket, id))
@@ -68,6 +71,8 @@ public class TicketController implements Controller {
 		ctx.status(200);
 	};
 
+	// TODO - add method to get tickets with query: approved/denied/pending
+
 	Handler getPendingTickets = ctx -> {
 		// get the current session object without creating one if it doesn't already
 		// exist
@@ -85,12 +90,13 @@ public class TicketController implements Controller {
 
 		// if they are a manager get the list of all pending tickets
 		List<Ticket> tickets = ticketService.getPendingTickets();
-		
-		// filter the tickets list and add only tickets that don't belong to the current manager
+
+		// filter the tickets list and add only tickets that don't belong to the current
+		// manager
 		// send the filtered tickets as json, send 200 status
 		List<Ticket> filteredTickets = new ArrayList<>();
-		for (Ticket ticket : tickets){
-			if(ticket.getEmployeeID() != employee.getId()) 
+		for (Ticket ticket : tickets) {
+			if (ticket.getEmployeeID() != employee.getId())
 				filteredTickets.add(ticket);
 		}
 		ctx.json(filteredTickets);
@@ -111,7 +117,7 @@ public class TicketController implements Controller {
 		// check that the employee is a manager, if not send 403 status
 		if (!employee.isManager())
 			ctx.status(403);
-		
+
 		int id = 0;
 
 		// check if the employee object has an ID, if not send 403 status
@@ -120,20 +126,24 @@ public class TicketController implements Controller {
 
 		id = employee.getId();
 
+		// TODO - add check that body exists
 		Ticket ticket = ctx.bodyAsClass(Ticket.class);
 
-		// check if the manager is trying to edit their own ticket, if so send 403 status
-		if(ticket.getEmployeeID() == id)
+		// check if the manager is trying to edit their own ticket, if so send 403
+		// status
+		if (ticket.getEmployeeID() == id)
 			ctx.status(403);
-		
-		// check that the status of the ticket is either approved/denied, if not send 400 status
-		if(!ticket.getStatus().matches("approved") || !ticket.getStatus().matches("denied"))
+
+		// check that the status of the ticket is either approved/denied, if not send
+		// 400 status
+		if (!ticket.getStatus().matches("approved") || !ticket.getStatus().matches("denied"))
 			ctx.status(400);
-			
+
+		// TODO - check that the ticket they are updating is not already approved/denied
 		// if there is an error adding the ticket, send 400 status
 		if (ticketService.updateTicket(ticket, id))
 			ctx.status(400);
-		
+
 		// otherwise all checks passed and the ticket was added, send 201 status
 		ctx.status(201);
 	};

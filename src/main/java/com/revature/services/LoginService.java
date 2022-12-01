@@ -21,4 +21,7 @@ public class LoginService {
 			return null;
 		}
 	}
+
+	// TODO - add method to register user
+	// TODO - make sure that user doesn't exist already
 }
