@@ -101,7 +101,30 @@ public class TicketDAOImpl implements TicketDAO {
 	}
 
 	// TODO - add method to get tickets with query: approved/denied/pending
-	// TODO - add method to get ticket by ID
+
+	@Override
+	public Ticket getTicketByID(int ticketID) {
+		try (Connection connection = ConnectionUtil.getConnection()) {
+			String sql = "SELECT  * FROM tickets WHERE ticket_id=" + ticketID + ";";
+
+			Statement statement = connection.createStatement();
+
+			ResultSet resultSet = statement.executeQuery(sql);
+
+			Ticket ticket = new Ticket();
+
+			ticket.setId(resultSet.getInt("ticket_id"));
+			ticket.setAmount(resultSet.getDouble("amount"));
+			ticket.setDescription(resultSet.getString("description"));
+			ticket.setStatus(resultSet.getString("status"));
+			ticket.setEmployeeID(resultSet.getInt("employee_id"));
+
+			return ticket;
+		} catch (SQLException e) {
+			e.getStackTrace();
+			return null;
+		}
+	}
 
 	/*
 	 * Ticket is passed as parameter so that other parts of the ticket can be
