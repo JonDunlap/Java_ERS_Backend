@@ -69,6 +69,40 @@ public class TicketDAOImpl implements TicketDAO {
 	}
 
 	@Override
+	public List<Ticket> getEmployeeTicketByQuery(int id, String query) {
+		try (Connection connection = ConnectionUtil.getConnection()) {
+			String sql = "SELECT  * FROM tickets WHERE employee_id=" + id + " AND status=?;";
+
+			PreparedStatement statement = connection.prepareStatement(sql);
+
+			statement.setString(1, query);
+
+			ResultSet resultSet = statement.executeQuery();
+
+			List<Ticket> tickets = new ArrayList<>();
+
+			while (resultSet.next()) {
+				Ticket ticket = new Ticket();
+
+				ticket.setId(resultSet.getInt("ticket_id"));
+				ticket.setAmount(resultSet.getDouble("amount"));
+				ticket.setDescription(resultSet.getString("description"));
+				ticket.setStatus(resultSet.getString("status"));
+				ticket.setEmployeeID(resultSet.getInt("employee_id"));
+				ticket.setResolvingManagerID(resultSet.getInt("resolving_manager_id"));
+
+				tickets.add(ticket);
+			}
+
+			return tickets;
+
+		} catch (SQLException e) {
+			e.getStackTrace();
+			return null;
+		}
+	}
+
+	@Override
 	public List<Ticket> getPendingTickets() {
 		try (Connection connection = ConnectionUtil.getConnection()) {
 
@@ -99,8 +133,6 @@ public class TicketDAOImpl implements TicketDAO {
 			return null;
 		}
 	}
-
-	// TODO - add method to get tickets with query: approved/denied/pending
 
 	@Override
 	public Ticket getTicketByID(int ticketID) {
