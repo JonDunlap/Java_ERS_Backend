@@ -2,6 +2,7 @@ package com.revature.services;
 
 import java.util.List;
 
+import com.revature.exceptions.EmployeeExistsException;
 import com.revature.models.Employee;
 
 public class LoginService {
@@ -22,6 +23,12 @@ public class LoginService {
 		}
 	}
 
-	// TODO - add method to register user
-	// TODO - make sure that user doesn't exist already
+	public boolean register(Employee employee) {
+		try {
+			return employeeService.addEmployee(employee);
+		} catch (EmployeeExistsException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
 }
