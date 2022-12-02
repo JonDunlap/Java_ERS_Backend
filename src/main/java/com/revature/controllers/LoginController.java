@@ -14,14 +14,25 @@ public class LoginController implements Controller {
 	Handler login = ctx -> {
 		LoginDTO attempt = ctx.bodyAsClass(LoginDTO.class);
 
+		// check that the attempted login has a username and password
+		if (attempt.email == null || attempt.password == null) {
+			ctx.status(400);
+			ctx.result("Email or password is empty");
+			return;
+		}
+
+		// attempt to login with email and password
 		if (loginService.login(attempt.email, attempt.password) != null) {
 			Employee employee = loginService.login(attempt.email, attempt.password);
+
 			HttpSession session = ctx.req().getSession();
 
 			session.setAttribute("employee", employee);
 			ctx.status(200);
 		} else {
+			// if no user was found, send 401 status
 			ctx.status(401);
+			ctx.result("There was no user found with that email and password, try again or register for access.");
 		}
 	};
 
@@ -31,8 +42,10 @@ public class LoginController implements Controller {
 		if (session != null) {
 			session.invalidate();
 			ctx.status(200);
+			ctx.result("Successfully logged out");
 		} else {
 			ctx.status(400);
+			ctx.result("No user is logged in");
 		}
 	};
 
