@@ -90,8 +90,49 @@ public class TicketController implements Controller {
 		ctx.status(200);
 	};
 
-	// ! IMPORTANT
-	// TODO - add method to get tickets with query: approved/denied/pending
+	Handler getEmployeeTicketByQuery = ctx -> {
+		// get the current session object without creating one if it doesn't already
+		// exist
+		HttpSession session = ctx.req().getSession(false);
+
+		// check if session is null, if so send 401 status
+		if (session == null) {
+			ctx.status(401);
+			ctx.result("Session is null");
+			return;
+		}
+
+		Employee employee = (Employee) session.getAttribute("employee");
+
+		// check if the employee object has an ID, if not send 403 status
+		if (employee.getId() == 0) {
+			ctx.status(403);
+			ctx.result("Employee has no ID");
+			return;
+		}
+
+		String queryString = ctx.queryParam("status");
+		// check that the user has included a query
+		if (queryString == null) {
+			ctx.status(401);
+			ctx.result("Query is null");
+			return;
+		}
+
+		// make sure that the query is either pending/approved/denied
+		if (queryString.matches("pending") || queryString.matches("approved") || queryString.matches("denied")) {
+			// get employee tickets by query with employee's ID and query
+			// return them as json, with status 200
+			List<Ticket> tickets = ticketService.getEmployeeTicketByQuery(employee.getId(), queryString);
+			ctx.json(tickets);
+			ctx.status(200);
+		} else {
+			// if the query is not pending/approved/denied, send 401 status
+			ctx.status(401);
+			ctx.result("Query is not valid, either approved|denied|pending");
+			return;
+		}
+	};
 
 	Handler getPendingTickets = ctx -> {
 		// get the current session object without creating one if it doesn't already
@@ -220,6 +261,7 @@ public class TicketController implements Controller {
 	@Override
 	public void addRoutes(Javalin app) {
 		app.get("/ticket", getEmployeeTickets);
+		app.get("/ticket/search", getEmployeeTicketByQuery);
 		app.get("/ticket/pending", getPendingTickets);
 		app.post("/ticket", addTicket);
 		app.patch("/ticket", updateTicket);
