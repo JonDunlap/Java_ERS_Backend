@@ -22,7 +22,7 @@ public class EmployeeService {
 		List<Employee> employees = getEmployees();
 
 		for (Employee emp : employees) {
-			if (emp.equals(employee)) {
+			if (emp.getEmail().equals(employee.getEmail())) {
 				throw new EmployeeExistsException("This employee exists already.");
 			}
 		}
