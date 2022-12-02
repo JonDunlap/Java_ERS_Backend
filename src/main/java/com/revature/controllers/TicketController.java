@@ -33,10 +33,19 @@ public class TicketController implements Controller {
 			return;
 		}
 
-		// TODO - add check that body exists
 		Ticket ticket = ctx.bodyAsClass(Ticket.class);
 
-		// TODO - check that amount and description are included
+		// check that ticket is not null, if so send 400 status
+		if (ticket == null) {
+			ctx.status(400);
+			return;
+		}
+
+		// check that amount and description are included, if not send 403 status
+		if (ticket.getAmount() == 0 || ticket.getDescription() == null) {
+			ctx.status(403);
+			return;
+		}
 
 		// if there is an error adding the ticket, send 400 status
 		if (!ticketService.addTicket(ticket, employee.getId())) {
