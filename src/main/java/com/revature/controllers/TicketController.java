@@ -137,13 +137,30 @@ public class TicketController implements Controller {
 
 		int id = employee.getId();
 
-		// TODO - add check that body exists
 		Ticket ticket = ctx.bodyAsClass(Ticket.class);
 
-		// TODO - check that the ticket exists in the DB
-		// TODO - check that the ticket they are updating is not already approved/denied
-		// TODO - check the ticket ID against the DB and make sure they aren't
-		// TODO - changing an approved/denied ticket
+		// check that ticket is not null, if so send 400 status
+		if (ticket == null) {
+			ctx.status(400);
+			return;
+		}
+
+		// get the ticket that is intended to be updated
+		// this way we can check if it exists
+		// and that it is not already approved/denied
+		Ticket ticketToUpdate = ticketService.getTicketByID(ticket.getId());
+
+		// make sure that a ticket exists to update, if not send 403 status
+		if (ticketToUpdate == null) {
+			ctx.status(403);
+			return;
+		}
+		// check that the ticket they are updating is not already approved/denied
+		// if it is approved/denied send 403 status
+		if (ticketToUpdate.getStatus().matches("approved") || ticketToUpdate.getStatus().matches("denied")) {
+			ctx.status(403);
+			return;
+		}
 
 		// check if the manager is trying to edit their own ticket, if so send 403
 		// status
