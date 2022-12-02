@@ -22,6 +22,7 @@ public class TicketController implements Controller {
 		// check if session is null, if so send 401 status
 		if (session == null) {
 			ctx.status(401);
+			ctx.result("Session is null");
 			return;
 		}
 
@@ -30,6 +31,7 @@ public class TicketController implements Controller {
 		// check if the employee object has an ID, if not send 403 status
 		if (employee.getId() == 0) {
 			ctx.status(403);
+			ctx.result("Employee has no ID");
 			return;
 		}
 
@@ -38,6 +40,7 @@ public class TicketController implements Controller {
 		// check that ticket is not null, if so send 400 status
 		if (ticket == null) {
 			ctx.status(400);
+			ctx.result("Ticket is null");
 			return;
 		}
 
