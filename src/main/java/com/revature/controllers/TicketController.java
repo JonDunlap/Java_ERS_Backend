@@ -99,7 +99,7 @@ public class TicketController implements Controller {
 		Employee employee = (Employee) session.getAttribute("employee");
 
 		// if the employee is not a manager, send 403 status
-		if (employee.isManager()) {
+		if (!employee.isManager()) {
 			ctx.status(403);
 			return;
 		}
@@ -127,20 +127,23 @@ public class TicketController implements Controller {
 		// check if session is null, if so send 401 status
 		if (session == null) {
 			ctx.status(401);
+			ctx.result("Session is null");
 			return;
 		}
 
 		Employee employee = (Employee) session.getAttribute("employee");
 
 		// if the employee is not a manager, send 403 status
-		if (employee.isManager()) {
+		if (!employee.isManager()) {
 			ctx.status(403);
+			ctx.result("Employee is not a manager");
 			return;
 		}
 
 		// check if the employee object has an ID, if not send 403 status
 		if (employee.getId() == 0) {
 			ctx.status(403);
+			ctx.result("Employee has no ID");
 			return;
 		}
 
@@ -151,6 +154,7 @@ public class TicketController implements Controller {
 		// check that ticket is not null, if so send 400 status
 		if (ticket == null) {
 			ctx.status(400);
+			ctx.result("Ticket is null");
 			return;
 		}
 
@@ -162,12 +166,14 @@ public class TicketController implements Controller {
 		// make sure that a ticket exists to update, if not send 403 status
 		if (ticketToUpdate == null) {
 			ctx.status(403);
+			ctx.result("There is no ticket with this ID in the database");
 			return;
 		}
 		// check that the ticket they are updating is not already approved/denied
 		// if it is approved/denied send 403 status
 		if (ticketToUpdate.getStatus().matches("approved") || ticketToUpdate.getStatus().matches("denied")) {
 			ctx.status(403);
+			ctx.result("The ticket you are trying to change is already approved|denied");
 			return;
 		}
 
@@ -175,24 +181,29 @@ public class TicketController implements Controller {
 		// status
 		if (ticket.getEmployeeID() == id) {
 			ctx.status(403);
+			ctx.result("You are trying to edit your own ticket");
 			return;
 		}
 
-		// check that the status of the ticket is either approved/denied, if not send
-		// 400 status
-		if (!ticket.getStatus().matches("approved") || !ticket.getStatus().matches("denied")) {
+		// check that the status of the ticket is either approved/denied
+		if (ticket.getStatus().matches("approved") || ticket.getStatus().matches("denied")) {
+
+			// if there is an error updating the ticket, send 400 status
+			if (!ticketService.updateTicket(ticket, id)) {
+				ctx.status(400);
+				ctx.result("There was an error updating this ticket");
+				return;
+			}
+
+			// otherwise all checks passed and the ticket was updated, send 201 status
+			ctx.status(201);
+
+		} else {
+			// if ticket status is not approved/denied, send 400 status
 			ctx.status(400);
+			ctx.result("Ticket can only be approved|denied");
 			return;
 		}
-
-		// if there is an error updating the ticket, send 400 status
-		if (ticketService.updateTicket(ticket, id)) {
-			ctx.status(400);
-			return;
-		}
-
-		// otherwise all checks passed and the ticket was updated, send 201 status
-		ctx.status(201);
 	};
 
 	@Override
