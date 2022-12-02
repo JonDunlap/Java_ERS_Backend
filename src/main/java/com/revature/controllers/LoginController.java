@@ -1,5 +1,6 @@
 package com.revature.controllers;
 
+import com.revature.exceptions.EmployeeExistsException;
 import com.revature.models.Employee;
 import com.revature.models.LoginDTO;
 import com.revature.services.LoginService;
@@ -49,14 +50,39 @@ public class LoginController implements Controller {
 		}
 	};
 
-	// TODO - add method to register user
-	// TODO - make sure that user has email & password
-	// TODO - default to employee unless manager is selected
-	// TODO - make sure that user doesn't exist already
+	Handler register = ctx -> {
+		LoginDTO attempt = ctx.bodyAsClass(LoginDTO.class);
+
+		// check that the attempted login has a username and password
+		if (attempt.email == null || attempt.password == null) {
+			ctx.status(400);
+			ctx.result("Email or password is empty");
+			return;
+		}
+
+		Employee employee = new Employee(attempt.email, attempt.password, attempt.isManager);
+
+		// attempt to register the employee
+		try {
+			if (loginService.register(employee)) {
+				ctx.status(200);
+				ctx.result("A new employee has been created with that email and password, proceed to login");
+			} else {
+				ctx.status(401);
+				ctx.result("Their was an unknown issue creating this employee");
+			}
+		} catch (EmployeeExistsException e) {
+			// if the employee exists already, send a 400 status
+			// and the exception toString
+			ctx.status(400);
+			ctx.result(e.toString());
+		}
+	};
 
 	@Override
 	public void addRoutes(Javalin app) {
 		app.post("/login", login);
+		app.post("/register", register);
 		app.get("/logout", logout);
 	}
 }
