@@ -23,7 +23,7 @@ public class EmployeeService {
 
 		for (Employee emp : employees) {
 			if (emp.getEmail().equals(employee.getEmail())) {
-				throw new EmployeeExistsException("This employee exists already.");
+				throw new EmployeeExistsException("An employee with that email exists already.");
 			}
 		}
 		return employeeDAO.addEmployee(employee);
