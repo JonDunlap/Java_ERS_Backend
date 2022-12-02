@@ -17,6 +17,11 @@ public class TicketService {
 		return ticketDAO.getEmployeeTickets(employeeID);
 	}
 
+	// TODO - add method to get tickets with query: approved/denied/pending
+	public List<Ticket> getEmployeeTicketByQuery(int employeeID, String query) {
+		return ticketDAO.getEmployeeTicketByQuery(employeeID, query);
+	}
+
 	public List<Ticket> getPendingTickets() {
 		return ticketDAO.getPendingTickets();
 	}
@@ -24,7 +29,6 @@ public class TicketService {
 	public Ticket getTicketByID(int id) {
 		return ticketDAO.getTicketByID(id);
 	}
-	// TODO - add method to get tickets with query: approved/denied/pending
 
 	public boolean updateTicket(Ticket ticket, int managerID) {
 		return ticketDAO.updateTicket(ticket, managerID);
