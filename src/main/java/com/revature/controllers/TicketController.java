@@ -41,20 +41,23 @@ public class TicketController implements Controller {
 			return;
 		}
 
-		// check that amount and description are included, if not send 403 status
+		// check that amount and description are included, if not send 400 status
 		if (ticket.getAmount() == 0 || ticket.getDescription() == null) {
-			ctx.status(403);
+			ctx.status(400);
+			ctx.result("Make sure to include an amount and a description");
 			return;
 		}
 
 		// if there is an error adding the ticket, send 400 status
 		if (!ticketService.addTicket(ticket, employee.getId())) {
 			ctx.status(400);
+			ctx.result("There was an error adding this ticket");
 			return;
 		}
 
 		// otherwise all checks passed and the ticket was added, send 201 status
 		ctx.status(201);
+		ctx.result("Ticket was added successfully");
 	};
 
 	Handler getEmployeeTickets = ctx -> {
@@ -65,6 +68,7 @@ public class TicketController implements Controller {
 		// check if session is null, if so send 401 status
 		if (session == null) {
 			ctx.status(401);
+			ctx.result("Session is null");
 			return;
 		}
 
@@ -73,6 +77,7 @@ public class TicketController implements Controller {
 		// check if the employee object has an ID, if not send 403 status
 		if (employee.getId() == 0) {
 			ctx.status(403);
+			ctx.result("Employee has no ID");
 			return;
 		}
 
@@ -93,6 +98,7 @@ public class TicketController implements Controller {
 		// check if session is null, if so send 401 status
 		if (session == null) {
 			ctx.status(401);
+			ctx.result("Session is null");
 			return;
 		}
 
@@ -101,6 +107,7 @@ public class TicketController implements Controller {
 		// if the employee is not a manager, send 403 status
 		if (!employee.isManager()) {
 			ctx.status(403);
+			ctx.result("Employee is not a manager");
 			return;
 		}
 
@@ -197,6 +204,7 @@ public class TicketController implements Controller {
 
 			// otherwise all checks passed and the ticket was updated, send 201 status
 			ctx.status(201);
+			ctx.result("Ticket was updated successfully");
 
 		} else {
 			// if ticket status is not approved/denied, send 400 status
