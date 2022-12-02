@@ -1,7 +1,6 @@
 package com.revature;
 
 import com.revature.controllers.Controller;
-import com.revature.controllers.EmployeeController;
 import com.revature.controllers.LoginController;
 import com.revature.controllers.TicketController;
 
@@ -17,7 +16,7 @@ public class Main {
 		// Create Javalin server
 		app = Javalin.create();
 		// add Javalin route controllers
-		configure(new TicketController(), new EmployeeController(), new LoginController());
+		configure(new TicketController(), new LoginController());
 		// start Javalin server on port 4000
 		app.start(4000);
 	}
