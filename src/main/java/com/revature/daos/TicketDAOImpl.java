@@ -113,11 +113,13 @@ public class TicketDAOImpl implements TicketDAO {
 
 			Ticket ticket = new Ticket();
 
-			ticket.setId(resultSet.getInt("ticket_id"));
-			ticket.setAmount(resultSet.getDouble("amount"));
-			ticket.setDescription(resultSet.getString("description"));
-			ticket.setStatus(resultSet.getString("status"));
-			ticket.setEmployeeID(resultSet.getInt("employee_id"));
+			if (resultSet.next()) {
+				ticket.setId(resultSet.getInt("ticket_id"));
+				ticket.setAmount(resultSet.getDouble("amount"));
+				ticket.setDescription(resultSet.getString("description"));
+				ticket.setStatus(resultSet.getString("status"));
+				ticket.setEmployeeID(resultSet.getInt("employee_id"));
+			}
 
 			return ticket;
 		} catch (SQLException e) {
