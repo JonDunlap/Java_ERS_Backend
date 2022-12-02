@@ -23,12 +23,7 @@ public class LoginService {
 		}
 	}
 
-	public boolean register(Employee employee) {
-		try {
-			return employeeService.addEmployee(employee);
-		} catch (EmployeeExistsException e) {
-			e.printStackTrace();
-			return false;
-		}
+	public boolean register(Employee employee) throws EmployeeExistsException {
+		return employeeService.addEmployee(employee);
 	}
 }
