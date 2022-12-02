@@ -17,7 +17,6 @@ public class TicketService {
 		return ticketDAO.getEmployeeTickets(employeeID);
 	}
 
-	// TODO - add method to get tickets with query: approved/denied/pending
 	public List<Ticket> getEmployeeTicketByQuery(int employeeID, String query) {
 		return ticketDAO.getEmployeeTicketByQuery(employeeID, query);
 	}
