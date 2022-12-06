@@ -1,7 +1,6 @@
 package com.revature.controllers;
 
 import java.util.List;
-import java.util.ArrayList;
 
 import com.revature.models.Employee;
 import com.revature.models.Ticket;
@@ -35,13 +34,16 @@ public class TicketController implements Controller {
 			return;
 		}
 
-		Ticket ticket = ctx.bodyAsClass(Ticket.class);
+		Ticket ticket = new Ticket();
 
-		// check that ticket is not null, if so send 400 status
-		if (ticket == null) {
+		try {
+			// attempt to create a ticket object using the ctx body
+			ticket = ctx.bodyAsClass(Ticket.class);
+
+		} catch (NullPointerException e) {
+			// if the body is null, send a 400 status
 			ctx.status(400);
 			ctx.result("Ticket is null");
-			return;
 		}
 
 		// check that amount and description are included, if not send 400 status
@@ -85,7 +87,7 @@ public class TicketController implements Controller {
 		}
 
 		String queryString = ctx.queryParam("status");
-		// check that the user has included a query
+		// check whether the user has included a query
 		if (queryString == null) {
 			// if there is no query get the employee's tickets by ID
 			// get employee tickets with employee's ID, return them as json, with status 200
@@ -93,10 +95,11 @@ public class TicketController implements Controller {
 			ctx.json(tickets);
 			ctx.status(200);
 		} else {
-			// make sure that the query is either pending/approved/denied
+			// if there is a query make sure it is either pending/approved/denied
 			if (queryString.matches("pending") || queryString.matches("approved") || queryString.matches("denied")) {
 				// get employee tickets by query with employee's ID and query
 				// return them as json, with status 200
+				// TODO - overload getEmployeeTickets() method to take additional parameters?
 				List<Ticket> tickets = ticketService.getEmployeeTicketByQuery(employee.getId(), queryString);
 				ctx.json(tickets);
 				ctx.status(200);
@@ -132,16 +135,13 @@ public class TicketController implements Controller {
 
 		// if they are a manager get the list of all pending tickets
 		List<Ticket> tickets = ticketService.getPendingTickets();
-		// create a new ArrayList that will hold all of the filtered tickets
-		List<Ticket> filteredTickets = new ArrayList<>();
-		// filter the tickets list, add only tickets that don't belong to the current
-		// manager
-		for (Ticket ticket : tickets) {
-			if (ticket.getEmployeeID() != employee.getId())
-				filteredTickets.add(ticket);
-		}
+
+		// remove pending tickets belonging to the current manager
+		tickets.removeIf(ticket -> (ticket.getEmployeeID() == employee.getId()));
+
 		// send the filtered tickets as json, send 200 status
-		ctx.json(filteredTickets);
+		// ctx.json(filteredTickets);
+		ctx.json(tickets);
 		ctx.status(200);
 	};
 
@@ -175,13 +175,16 @@ public class TicketController implements Controller {
 
 		int id = employee.getId();
 
-		Ticket ticket = ctx.bodyAsClass(Ticket.class);
+		Ticket ticket = new Ticket();
 
-		// check that ticket is not null, if so send 400 status
-		if (ticket == null) {
+		try {
+			// attempt to create a ticket object using the ctx body
+			ticket = ctx.bodyAsClass(Ticket.class);
+
+		} catch (NullPointerException e) {
+			// if the body is null, send a 400 status
 			ctx.status(400);
 			ctx.result("Ticket is null");
-			return;
 		}
 
 		// get the ticket that is intended to be updated
