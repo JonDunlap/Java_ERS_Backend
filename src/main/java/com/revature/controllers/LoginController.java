@@ -23,31 +23,38 @@ public class LoginController implements Controller {
 		}
 
 		// attempt to login with email and password
-		if (loginService.login(attempt.email, attempt.password) != null) {
-			Employee employee = loginService.login(attempt.email, attempt.password);
-
-			HttpSession session = ctx.req().getSession();
-
-			session.setAttribute("employee", employee);
-			ctx.status(200);
-		} else {
+		if (loginService.login(attempt.email, attempt.password) == null) {
 			// if no user was found, send 401 status
 			ctx.status(401);
 			ctx.result("There was no user found with that email and password, try again or register for access.");
+			return;
 		}
+
+		// create employee object with employee returned from service
+		Employee employee = loginService.login(attempt.email, attempt.password);
+
+		HttpSession session = ctx.req().getSession();
+
+		// add employee to the session, return 200 status
+		session.setAttribute("employee", employee);
+		ctx.status(200);
+
 	};
 
 	Handler logout = ctx -> {
 		HttpSession session = ctx.req().getSession(false);
 
-		if (session != null) {
-			session.invalidate();
-			ctx.status(200);
-			ctx.result("Successfully logged out");
-		} else {
+		// if session is null, return 400 status
+		if (session == null) {
 			ctx.status(400);
 			ctx.result("No user is logged in");
+			return;
 		}
+
+		// invalidate the session, send 200 status
+		session.invalidate();
+		ctx.status(200);
+		ctx.result("Successfully logged out");
 	};
 
 	Handler register = ctx -> {
