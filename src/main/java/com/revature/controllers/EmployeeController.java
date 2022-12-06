@@ -56,6 +56,7 @@ public class EmployeeController implements Controller {
 		app.get("/employee", getEmployees);
 		// ! DEBUG - remove routes, methods only used for login functionality
 		app.get("/employee/{id}", getEmployee);
+		// ! DEBUG - remove routes, methods only used for login functionality
 		app.post("/employee", addEmployee);
 	}
 }
