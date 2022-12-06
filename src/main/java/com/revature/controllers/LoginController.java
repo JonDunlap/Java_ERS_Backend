@@ -51,16 +51,7 @@ public class LoginController implements Controller {
 	};
 
 	Handler register = ctx -> {
-		LoginDTO attempt = new LoginDTO();
-
-		// check that the ctx body is not null
-		try {
-			attempt = ctx.bodyAsClass(LoginDTO.class);
-		} catch (NullPointerException e) {
-			// if it is null send 400 status
-			ctx.status(400);
-			ctx.result("No body was included for login");
-		}
+		LoginDTO attempt = ctx.bodyAsClass(LoginDTO.class);
 
 		// check that the attempted login has a username and password
 		if (attempt.email == null || attempt.password == null) {
