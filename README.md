@@ -83,3 +83,5 @@ The overall goal of this project was to build a better understanding of the fund
   ```
 
   my program would keep running and I would end up with a `NullPointerException` on the next line since my code would continue running and then try to access a null value. I was able to fix this issue by explicitly calling `return();` inside of my if statements which allowed me to still clean up my code and if there was an issue with user input I could return a status and prevent the method from continuing to run when there would be an issue.
+
+- If a post request is made with no content in the body it is causing a `MismatchedInputException` inside of Jackson databind, tried using a try..catch inside of the methods that require the `ctx.bodyAsClass()`, but this does not resolve the issue.
