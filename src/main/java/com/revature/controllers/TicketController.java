@@ -34,16 +34,13 @@ public class TicketController implements Controller {
 			return;
 		}
 
-		Ticket ticket = new Ticket();
+		Ticket ticket = ctx.bodyAsClass(Ticket.class);
 
-		try {
-			// attempt to create a ticket object using the ctx body
-			ticket = ctx.bodyAsClass(Ticket.class);
-
-		} catch (NullPointerException e) {
-			// if the body is null, send a 400 status
+		// if the body is null, send a 400 status
+		if (ticket == null) {
 			ctx.status(400);
 			ctx.result("Ticket is null");
+			return;
 		}
 
 		// check that amount and description are included, if not send 400 status
@@ -175,16 +172,13 @@ public class TicketController implements Controller {
 
 		int id = employee.getId();
 
-		Ticket ticket = new Ticket();
+		Ticket ticket = ctx.bodyAsClass(Ticket.class);
 
-		try {
-			// attempt to create a ticket object using the ctx body
-			ticket = ctx.bodyAsClass(Ticket.class);
-
-		} catch (NullPointerException e) {
+		if (ticket == null) {
 			// if the body is null, send a 400 status
 			ctx.status(400);
 			ctx.result("Ticket is null");
+			return;
 		}
 
 		// get the ticket that is intended to be updated
