@@ -69,7 +69,7 @@ public class TicketDAOImpl implements TicketDAO {
 	}
 
 	@Override
-	public List<Ticket> getEmployeeTicketByQuery(int id, String query) {
+	public List<Ticket> getEmployeeTickets(int id, String query) {
 		try (Connection connection = ConnectionUtil.getConnection()) {
 			String sql = "SELECT  * FROM tickets WHERE employee_id=" + id + " AND status=?;";
 

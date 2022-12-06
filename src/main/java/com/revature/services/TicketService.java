@@ -17,8 +17,8 @@ public class TicketService {
 		return ticketDAO.getEmployeeTickets(employeeID);
 	}
 
-	public List<Ticket> getEmployeeTicketByQuery(int employeeID, String query) {
-		return ticketDAO.getEmployeeTicketByQuery(employeeID, query);
+	public List<Ticket> getEmployeeTickets(int employeeID, String query) {
+		return ticketDAO.getEmployeeTickets(employeeID, query);
 	}
 
 	public List<Ticket> getPendingTickets() {

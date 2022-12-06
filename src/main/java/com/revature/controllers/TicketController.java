@@ -99,8 +99,8 @@ public class TicketController implements Controller {
 			if (queryString.matches("pending") || queryString.matches("approved") || queryString.matches("denied")) {
 				// get employee tickets by query with employee's ID and query
 				// return them as json, with status 200
-				// TODO - overload getEmployeeTickets() method to take additional parameters?
-				List<Ticket> tickets = ticketService.getEmployeeTicketByQuery(employee.getId(), queryString);
+				// make use of method overloading
+				List<Ticket> tickets = ticketService.getEmployeeTickets(employee.getId(), queryString);
 				ctx.json(tickets);
 				ctx.status(200);
 			} else {
