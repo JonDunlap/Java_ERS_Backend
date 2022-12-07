@@ -202,7 +202,7 @@ public class TicketController implements Controller {
 
 		// check if the manager is trying to edit their own ticket, if so send 403
 		// status
-		if (ticket.getEmployeeID() == id) {
+		if (ticketToUpdate.getEmployeeID() == id) {
 			ctx.status(403);
 			ctx.result("You are trying to edit your own ticket");
 			return;
