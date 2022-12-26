@@ -1,4 +1,4 @@
-- [Project 1 Repository](#project-1-repository)
+- [Expense Reimbursement System - Java Backend](#expense-reimbursement-system---java-backend)
 	- [Description:](#description)
 	- [Setting up the app](#setting-up-the-app)
 	- [Models](#models)
@@ -6,7 +6,7 @@
 	- [Notes:](#notes)
 	- [Issues/Challenges](#issueschallenges)
 
-# Project 1 Repository
+# Expense Reimbursement System - Java Backend
 
 ## Description:
 
